@@ -104,7 +104,10 @@ class NlpEngineProvider:
         if not Path(conf_file).exists():
             nlp_configuration = {
                 "nlp_engine_name": "spacy",
-                "models": [{"lang_code": "en", "model_name": "en_core_web_lg"}],
+                "models": [
+                    {"lang_code": "en", "model_name": "en_core_web_lg"},
+                    {"lang_code": "es", "model_name": "es_core_news_md"}
+                    ],
             }
             logger.warning(
                 f"configuration file {conf_file} not found.  "

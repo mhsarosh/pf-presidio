@@ -3,3 +3,69 @@ models:
   -
     lang_code: en
     model_name: en_core_web_lg
+  -
+    lang_code: es
+    model_name: es_core_news_md
+  -
+    lang_code: fr
+    model_name: fr_core_news_md
+  -
+    lang_code: de
+    model_name: de_core_news_md
+  -
+    lang_code: ca
+    model_name: ca_core_news_md
+  -
+    lang_code: zh
+    model_name: zh_core_web_md
+  -
+    lang_code: hr
+    model_name: hr_core_news_md
+  -
+    lang_code: da
+    model_name: da_core_news_md
+  -
+    lang_code: nl
+    model_name: nl_core_news_md
+  -
+    lang_code: fi
+    model_name: fi_core_news_md
+  -
+    lang_code: el
+    model_name: el_core_news_md
+  -
+    lang_code: it
+    model_name: it_core_news_md
+  -
+    lang_code: ja
+    model_name: ja_core_news_md
+  -
+    lang_code: ko
+    model_name: ko_core_news_md
+  -
+    lang_code: lt
+    model_name: lt_core_news_md
+  -
+    lang_code: mk
+    model_name: mk_core_news_md
+  -
+    lang_code: nb
+    model_name: nb_core_news_md
+  -
+    lang_code: pl
+    model_name: pl_core_news_md
+  -
+    lang_code: pt
+    model_name: pt_core_news_md
+  -
+    lang_code: ro
+    model_name: ro_core_news_md
+  -
+    lang_code: ru
+    model_name: ru_core_news_md
+  -
+    lang_code: sv
+    model_name: sv_core_news_md
+  -
+    lang_code: uk
+    model_name: uk_core_news_md
