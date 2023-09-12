@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Tuple
 
 from flask import Flask, request, jsonify, Response
+from presidio_analyzer.analyzer_response import AnalyzerResponse
 from werkzeug.exceptions import HTTPException
 
 from presidio_analyzer.analyzer_engine import AnalyzerEngine
@@ -90,6 +91,63 @@ class Server:
                     f"AnalyzerEngine.analyze(). {e}"
                 )
                 return jsonify(error=e.args[0]), 500
+
+        @self.app.route("/bulkanalyze", methods=["POST"])
+        def bulkAnalyze() -> Tuple[int,Tuple[str, int]]:
+            """Execute the analyzer function for multiple inputs."""
+            # Parse the request params
+
+            results_list = []
+            req_data_list = request.get_json()
+
+            for req_data_obj in req_data_list:
+                try:
+                    req_data = AnalyzerRequest(req_data_obj)
+
+                    if not req_data.text:
+                        raise Exception("No text provided")
+
+                    if not req_data.language:
+                        raise Exception("No language provided")
+
+                    recognizer_result_list = self.engine.analyze(
+                        text=req_data.text,
+                        language=req_data.language,
+                        correlation_id=req_data.correlation_id,
+                        score_threshold=req_data.score_threshold,
+                        entities=req_data.entities,
+                        return_decision_process=req_data.return_decision_process,
+                        ad_hoc_recognizers=req_data.ad_hoc_recognizers,
+                        context=req_data.context,
+                    )
+
+                    results_list.append(AnalyzerResponse(req_data_obj['id'],recognizer_result_list))
+
+                except TypeError as te:
+                    error_msg = (
+                        f"Failed to parse /bulkAnalyze request "
+                        f"for AnalyzerEngine.analyze(). {te.args[0]}"
+                    )
+                    self.logger.error(error_msg)
+                    # return jsonify(error=error_msg), 400
+                    results_list.append(AnalyzerResponse(req_data_obj['id'],[],error_msg))
+
+                except Exception as e:
+                    self.logger.error(
+                        f"A fatal error occurred during execution of "
+                        f"AnalyzerEngine.analyze(). {e}"
+                    )
+                    # return jsonify(error=e.args[0]), 500
+                    results_list.append(AnalyzerResponse(req_data_obj['id'],[],e.args[0]))
+            
+            return Response(
+                    json.dumps(
+                        results_list,
+                        default=lambda o: o.to_dict(),
+                        sort_keys=True,
+                    ),
+                    content_type="application/json",
+                )
 
         @self.app.route("/recognizers", methods=["GET"])
         def recognizers() -> Tuple[str, int]:
